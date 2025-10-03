@@ -369,9 +369,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 📧 Email: sohailshiraj@example.com
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/auth-flow-sim/issues)
-- 📖 Documentation: [GitHub Wiki](https://github.com/yourusername/auth-flow-sim/wiki)
+- 📧 Email: sohail.shiraj@hotmail.com
+- 🐛 Issues: [GitHub Issues](https://github.com/sohailshiraj/auth-flow-sim/issues)
+- 📖 Documentation: [GitHub Wiki](https://github.com/sohailshiraj/auth-flow-sim/wiki)
 
 ---
 
