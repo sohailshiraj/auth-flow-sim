@@ -1,4 +1,4 @@
-name: Lint and Format Check
+name: CI/CD Pipeline
 
 on:
   push:
@@ -30,4 +30,19 @@ jobs:
       run: npm run format:check
       
     - name: Run TypeScript type check
-      run: npx tsc --noEmit
+      run: npm run type-check
+      
+    - name: Build library
+      run: npm run build
+      
+    - name: Test build output
+      run: |
+        # Check if dist directory exists and contains expected files
+        test -d dist
+        test -f dist/index.js
+        test -f dist/index.d.ts
+        test -f dist/index.d.ts.map
+        echo "✅ Build output verified"
+        
+    - name: Run complete CI check
+      run: npm run ci:check

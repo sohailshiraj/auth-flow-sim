@@ -2,9 +2,25 @@
   "name": "auth-flow-sim",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build && npm run test",
+    "test": "npm run ci:check",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix",
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'",
@@ -12,12 +28,27 @@
     "type-check": "tsc --noEmit",
     "prepare": "husky",
     "pre-commit": "lint-staged",
-    "ci:check": "npm run lint && npm run format:check && npm run type-check"
+    "ci:check": "npm run lint && npm run format:check && npm run type-check",
+    "test:setup": "node test-setup.js",
+    "clean": "rm -rf dist"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "authentication",
+    "auth",
+    "simulator",
+    "testing",
+    "oauth",
+    "2fa",
+    "password-reset",
+    "session",
+    "development",
+    "mock",
+    "typescript",
+    "javascript"
+  ],
+  "author": "Sohail Shiraj <sohailshiraj@example.com>",
+  "license": "MIT",
+  "description": "A comprehensive authentication flow simulator for local development. Simulate OAuth, 2FA, password reset, and session management flows without real auth providers.",
   "devDependencies": {
     "@types/node": "^24.5.2",
     "@typescript-eslint/eslint-plugin": "^8.44.1",

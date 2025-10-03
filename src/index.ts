@@ -1,26 +1,15 @@
-// Sample TypeScript file to test linting and formatting
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+/**
+ * Authentication Flow Simulator
+ * A comprehensive library for simulating authentication flows during development
+ */
 
-class AuthService {
-  private users: User[] = [];
+export * from "./types/index";
+export * from "./simulators/index";
+export * from "./flows/index";
+export * from "./utils/index";
 
-  async createUser(userData: Omit<User, "id">): Promise<User> {
-    const newUser: User = {
-      id: this.users.length + 1,
-      ...userData,
-    };
+// Main simulator class
+export { AuthFlowSimulator } from "./simulators/AuthFlowSimulator";
 
-    this.users.push(newUser);
-    return newUser;
-  }
-
-  async findUserById(id: number): Promise<User | undefined> {
-    return this.users.find((user) => user.id === id);
-  }
-}
-
-export default AuthService;
+// Convenience exports
+export { createAuthFlowSimulator } from "./utils/createAuthFlowSimulator";
