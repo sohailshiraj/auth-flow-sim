@@ -2,4 +2,4 @@
  * Simulators module exports
  */
 
-export { AuthFlowSimulator } from "./AuthFlowSimulator.js";
+export { AuthFlowSimulator } from "./AuthFlowSimulator";

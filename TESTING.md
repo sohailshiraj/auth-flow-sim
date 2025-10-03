@@ -1,213 +1,311 @@
-# Testing Guide for Husky + lint-staged + GitHub Actions
+# Testing Guide for auth-flow-sim Package
 
-This guide explains how to test the automated linting and formatting setup.
+This guide provides comprehensive testing approaches for the `auth-flow-sim` package without requiring separate test applications.
 
-## 🧪 Test Scenarios
+## 🚀 Quick Start Testing
 
-### 1. Local Pre-commit Hook Testing
-
-#### Test 1: Auto-fixable Issues
-Create a file with formatting and linting issues that can be auto-fixed:
-
+### 1. **Basic Package Verification**
 ```bash
-# Create a file with bad formatting
-cat > src/test-auto-fix.ts << 'EOF'
-interface BadFormatting{
-id:number;
-name:string;
-}
-
-class BadClass{
-private data:BadFormatting[]=[];
-async getData():Promise<BadFormatting[]>{
-return this.data.filter(item=>item.id>0);
-}
-}
-EOF
-
-# Stage and commit - should auto-fix and succeed
-git add src/test-auto-fix.ts
-git commit -m "Test auto-fix functionality"
+# Test if package installs and basic functionality works
+npm run test:basic
+# or
+node test-package.js
 ```
 
-**Expected Result**: ✅ Commit succeeds, file is automatically formatted
-
-#### Test 2: Unfixable Issues
-Create a file with issues that cannot be auto-fixed:
-
+### 2. **Comprehensive Feature Testing**
 ```bash
-# Create a file with unfixable issues
-cat > src/test-unfixable.ts << 'EOF'
-// @ts-ignore
-const unusedVariable = "this will cause ESLint error";
-const anotherUnused = "this too";
-
-// Missing return type
-function badFunction(param) {
-  return param + 1;
-}
-EOF
-
-# Stage and commit - should fail
-git add src/test-unfixable.ts
-git commit -m "Test unfixable issues"
+# Test all features with detailed output
+npm run test:all
+# or
+node comprehensive-test.js
 ```
 
-**Expected Result**: ❌ Commit fails, you must fix issues manually
-
-### 2. CI/CD Testing
-
-#### Test 3: Clean Code (Should Pass)
+### 3. **Interactive Testing**
 ```bash
-# Create clean code
-cat > src/test-clean.ts << 'EOF'
-interface CleanInterface {
-  id: number;
-  name: string;
-}
+# Interactive mode to test features on-demand
+npm run test:interactive
+# or
+node interactive-test.js
+```
 
-class CleanClass {
-  private data: CleanInterface[] = [];
+## 📋 Available Test Commands
 
-  async getData(): Promise<CleanInterface[]> {
-    return this.data.filter((item) => item.id > 0);
+| Command | Description | Use Case |
+|---------|-------------|----------|
+| `npm run test:basic` | Basic functionality test | Quick verification |
+| `npm run test:all` | Comprehensive test suite | Full feature testing |
+| `npm run test:interactive` | Interactive testing mode | Manual testing |
+| `npm run test:quick` | Quick test runner | Fast testing |
+| `npm run test:performance` | Performance benchmark | Speed testing |
+| `npm run test:stress` | Stress test with concurrency | Load testing |
+| `npm run test:package` | Run both basic and comprehensive | Complete testing |
+
+## 🧪 Test Types Explained
+
+### 1. **Basic Test** (`test-package.js`)
+- **Purpose**: Quick verification that package works
+- **Duration**: ~5 seconds
+- **Tests**: Login, 2FA, OAuth, Password Reset, Session Management
+- **Output**: Simple pass/fail with key information
+
+### 2. **Comprehensive Test** (`comprehensive-test.js`)
+- **Purpose**: Complete feature coverage testing
+- **Duration**: ~30 seconds
+- **Tests**: All features + edge cases + error scenarios
+- **Output**: Detailed test results with summary
+
+### 3. **Interactive Test** (`interactive-test.js`)
+- **Purpose**: Manual testing with user control
+- **Duration**: User-controlled
+- **Tests**: Individual feature testing on-demand
+- **Output**: Step-by-step interactive testing
+
+### 4. **Quick Test Runner** (`quick-test.js`)
+- **Purpose**: Flexible testing with different modes
+- **Duration**: Varies by mode
+- **Modes**: basic, all, interactive, performance, stress
+- **Output**: Mode-specific results
+
+## 🔧 Testing Individual Features
+
+### Login Testing
+```bash
+# Test basic login
+node -e "
+import { createAuthFlowSimulator } from 'auth-flow-sim';
+const sim = createAuthFlowSimulator({ enableLogging: true });
+sim.start().then(() => {
+  return sim.simulateLogin({ email: 'user@example.com', password: 'password123' });
+}).then(result => {
+  console.log(result.success ? '✅ Login works' : '❌ Login failed');
+  return sim.stop();
+});
+"
+```
+
+### 2FA Testing
+```bash
+# Test 2FA flow
+node -e "
+import { createAuthFlowSimulator } from 'auth-flow-sim';
+const sim = createAuthFlowSimulator({ enableLogging: true });
+sim.start().then(async () => {
+  const login = await sim.simulateLogin({ email: 'admin@example.com', password: 'password123' });
+  if (login.requires2FA) {
+    const twoFactor = await sim.simulate2FA(login.user.id, { code: '123456', method: 'totp' });
+    console.log(twoFactor.success ? '✅ 2FA works' : '❌ 2FA failed');
   }
-}
-EOF
-
-git add src/test-clean.ts
-git commit -m "Add clean code for CI testing"
-git push origin test-branch
+  return sim.stop();
+});
+"
 ```
 
-**Expected Result**: ✅ GitHub Actions passes
-
-#### Test 4: Dirty Code (Should Fail)
+### OAuth Testing
 ```bash
-# Create dirty code
-cat > src/test-dirty.ts << 'EOF'
-// Missing semicolons, bad formatting
-const badCode = "test"
-const anotherBad = "code"
-
-function badFunction(param){
-return param+1
-}
-EOF
-
-git add src/test-dirty.ts
-git commit -m "Add dirty code for CI testing"
-git push origin test-branch
+# Test OAuth flow
+node -e "
+import { createAuthFlowSimulator } from 'auth-flow-sim';
+const sim = createAuthFlowSimulator({ enableLogging: true });
+sim.start().then(() => {
+  return sim.simulateOAuthCallback({ code: 'test', state: 'test', provider: 'google' });
+}).then(result => {
+  console.log(result.success ? '✅ OAuth works' : '❌ OAuth failed');
+  return sim.stop();
+});
+"
 ```
 
-**Expected Result**: ❌ GitHub Actions fails
+## 📊 Performance Testing
 
-## 🔧 Manual Testing Commands
-
-### Test All Checks Locally
+### Benchmark Testing
 ```bash
-npm run ci:check
+# Run performance benchmark
+npm run test:performance
 ```
 
-### Test Individual Components
+This will:
+- Run 100 login operations
+- Measure execution time
+- Calculate operations per second
+- Show success rate
+
+### Stress Testing
 ```bash
-# ESLint only
-npm run lint
-
-# Prettier only
-npm run format:check
-
-# TypeScript only
-npm run type-check
-
-# Auto-fix issues
-npm run lint:fix
-npm run format
+# Run stress test
+npm run test:stress
 ```
 
-### Test Pre-commit Hook Manually
+This will:
+- Test 50 concurrent users
+- Each user performs 10 operations
+- Measure performance under load
+- Show concurrent operation handling
+
+## 🐛 Debugging and Troubleshooting
+
+### Enable Detailed Logging
 ```bash
-# Run lint-staged manually
-npm run pre-commit
+# Run with verbose logging
+node -e "
+import { createAuthFlowSimulator } from 'auth-flow-sim';
+const sim = createAuthFlowSimulator({ 
+  enableLogging: true, 
+  delayMs: 100 
+});
+// ... your test code
+"
 ```
 
-## 🚀 GitHub Actions Testing
-
-### Test Workflow Triggers
-1. **Push to main/develop**: Workflow should run automatically
-2. **Pull Request**: Workflow should run on PR creation/updates
-3. **Manual Trigger**: Can be triggered manually from GitHub UI
-
-### Check Workflow Status
-1. Go to your repository on GitHub
-2. Click "Actions" tab
-3. Look for "Lint and Format Check" workflow
-4. Check if it passes or fails
-
-### Workflow Steps
-The workflow runs these steps:
-1. Checkout code
-2. Setup Node.js 18
-3. Install dependencies (`npm ci`)
-4. Run ESLint (`npm run lint`)
-5. Check Prettier formatting (`npm run format:check`)
-6. Run TypeScript type check (`npx tsc --noEmit`)
-
-## 🐛 Troubleshooting
-
-### Pre-commit Hook Not Running
+### Check Simulator State
 ```bash
-# Check if Husky is installed
-ls -la .husky/
-
-# Reinstall Husky
-npm run prepare
-
-# Check Git hooks
-ls -la .git/hooks/
+# Inspect simulator state
+node -e "
+import { createAuthFlowSimulator } from 'auth-flow-sim';
+const sim = createAuthFlowSimulator();
+sim.start().then(() => {
+  console.log('State:', sim.getState());
+  console.log('Events:', sim.getEvents());
+  return sim.stop();
+});
+"
 ```
 
-### ESLint Issues
+### Event Monitoring
 ```bash
-# Check ESLint configuration
-npx eslint --print-config src/index.ts
-
-# Run ESLint with debug info
-DEBUG=eslint:* npm run lint
+# Monitor events in real-time
+node -e "
+import { createAuthFlowSimulator } from 'auth-flow-sim';
+const sim = createAuthFlowSimulator({ enableLogging: true });
+sim.on('auth-event', (event) => {
+  console.log('Event:', event.type, event.success);
+});
+sim.start().then(() => {
+  // ... perform operations
+});
+"
 ```
 
-### Prettier Issues
-```bash
-# Check Prettier configuration
-npx prettier --find-config-path src/index.ts
+## 🎯 Testing Scenarios
 
-# Check what files Prettier would format
-npx prettier --check src/**/*.{ts,js,json,md}
-```
+### 1. **Happy Path Testing**
+- Valid login credentials
+- Successful 2FA completion
+- Valid OAuth callback
+- Successful password reset
+- Valid session management
 
-## 📊 Test Results Summary
+### 2. **Error Path Testing**
+- Invalid credentials
+- Wrong 2FA codes
+- Invalid OAuth states
+- Expired tokens
+- Invalid sessions
 
-| Test | Local Hook | CI/CD | Status |
-|------|------------|-------|--------|
-| Auto-fixable issues | ✅ Auto-fixes | ✅ Passes | Working |
-| Unfixable issues | ❌ Blocks commit | ❌ Fails | Working |
-| Clean code | ✅ Passes | ✅ Passes | Working |
-| Dirty code | ❌ Blocks commit | ❌ Fails | Working |
+### 3. **Edge Case Testing**
+- Missing required fields
+- Malformed input data
+- Concurrent operations
+- Rate limiting
+- Session expiry
 
-## 🎯 Best Practices for Testing
+### 4. **Integration Testing**
+- Multiple auth methods
+- Session persistence
+- Event tracking
+- State management
 
-1. **Always test locally first** - Don't rely only on CI/CD
-2. **Test both scenarios** - Clean code should pass, dirty code should fail
-3. **Test edge cases** - Empty files, large files, special characters
-4. **Test different file types** - .ts, .js, .json, .md files
-5. **Monitor CI/CD regularly** - Check GitHub Actions status frequently
+## 📈 Test Results Interpretation
+
+### Success Indicators
+- ✅ All tests pass
+- 📊 High success rate (>95%)
+- ⏱️ Reasonable performance (<100ms per operation)
+- 🔄 No memory leaks
+- 📝 Proper event logging
+
+### Failure Indicators
+- ❌ Any test fails
+- 📊 Low success rate (<90%)
+- ⏱️ Poor performance (>500ms per operation)
+- 🔄 Memory leaks detected
+- 📝 Missing or incorrect events
 
 ## 🔄 Continuous Testing
 
-Set up these automated tests:
-1. **Pre-commit**: Runs on every commit attempt
-2. **CI/CD**: Runs on every push/PR
-3. **Scheduled**: Run nightly/weekly comprehensive tests
-4. **Release**: Run before every release
+### Pre-commit Testing
+```bash
+# Run before committing
+npm run test:package
+```
 
-This ensures your code quality standards are always maintained! 🎉
+### CI/CD Testing
+```bash
+# Run in CI/CD pipeline
+npm run test:all && npm run test:performance
+```
+
+### Regular Testing
+```bash
+# Daily testing routine
+npm run test:basic
+npm run test:performance
+```
+
+## 🛠️ Custom Testing
+
+### Create Custom Test
+```javascript
+// custom-test.js
+import { createAuthFlowSimulator } from 'auth-flow-sim';
+
+async function customTest() {
+    const simulator = createAuthFlowSimulator({
+        enableLogging: true,
+        delayMs: 100,
+        config: {
+            // Your custom configuration
+        }
+    });
+
+    await simulator.start();
+    
+    try {
+        // Your custom test logic
+        const result = await simulator.simulateLogin({
+            email: 'custom@example.com',
+            password: 'custompass'
+        });
+        
+        console.log('Custom test result:', result);
+    } finally {
+        await simulator.stop();
+    }
+}
+
+customTest().catch(console.error);
+```
+
+### Run Custom Test
+```bash
+node custom-test.js
+```
+
+## 📚 Additional Resources
+
+- **Package Documentation**: See README.md
+- **API Reference**: Check TypeScript definitions in dist/
+- **Examples**: See examples/ directory
+- **Issues**: Report bugs on GitHub
+- **Contributing**: See CONTRIBUTING.md
+
+## 🎉 Conclusion
+
+This testing approach provides comprehensive coverage of all `auth-flow-sim` features without requiring separate test applications. You can:
+
+1. **Quickly verify** package functionality with basic tests
+2. **Thoroughly test** all features with comprehensive tests
+3. **Manually explore** features with interactive testing
+4. **Measure performance** with benchmark tests
+5. **Test under load** with stress tests
+
+Choose the testing approach that best fits your needs!

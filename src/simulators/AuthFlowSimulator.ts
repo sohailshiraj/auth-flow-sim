@@ -12,8 +12,8 @@ import type {
   AuthEvent,
   SimulatorState,
   AuthEventType,
-} from "../types/index.js";
-import { generateId, delay, createMockUser } from "../utils/helpers.js";
+} from "../types/index";
+import { generateId, delay, createMockUser } from "../utils/helpers";
 
 /**
  * Main Authentication Flow Simulator class

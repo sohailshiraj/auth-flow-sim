@@ -1,6 +1,6 @@
 {
   "name": "auth-flow-sim",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -21,6 +21,13 @@
     "dev": "tsc --watch",
     "prepublishOnly": "npm run build && npm run test",
     "test": "npm run ci:check",
+    "test:basic": "npx tsx testing/scripts/basic-test.ts",
+    "test:all": "npx tsx testing/suites/comprehensive-test.ts",
+    "test:interactive": "npx tsx testing/interactive/interactive-test.ts",
+    "test:quick": "npx tsx testing/scripts/quick-test.ts",
+    "test:performance": "npx tsx testing/scripts/quick-test.ts performance",
+    "test:stress": "npx tsx testing/scripts/quick-test.ts stress",
+    "test:package": "npm run test:basic && npm run test:all",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix",
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'",
@@ -60,6 +67,7 @@
     "lint-staged": "^16.2.3",
     "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
+    "tsx": "^4.7.0",
     "typescript": "^5.9.2"
   },
   "lint-staged": {

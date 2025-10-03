@@ -1,0 +1,20 @@
+{
+    "name": "auth-flow-sim-testing",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "basic": "npx tsx scripts/basic-test.ts",
+        "comprehensive": "npx tsx suites/comprehensive-test.ts",
+        "interactive": "npx tsx interactive/interactive-test.ts",
+        "quick": "npx tsx scripts/quick-test.ts",
+        "performance": "npx tsx scripts/quick-test.ts performance",
+        "stress": "npx tsx scripts/quick-test.ts stress",
+        "all": "npm run basic && npm run comprehensive",
+        "build": "tsc",
+        "clean": "rm -rf dist"
+    },
+    "devDependencies": {
+        "tsx": "^4.7.0",
+        "typescript": "^5.9.2"
+    }
+}

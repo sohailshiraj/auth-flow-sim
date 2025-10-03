@@ -2,4 +2,4 @@
  * Flows module exports
  */
 
-export { PredefinedFlows } from "./PredefinedFlows.js";
+export { PredefinedFlows } from "./PredefinedFlows";

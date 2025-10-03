@@ -1,5 +1,5 @@
-import { AuthFlowSimulator } from "../simulators/AuthFlowSimulator.js";
-import type { SimulatorOptions } from "../types/index.js";
+import { AuthFlowSimulator } from "../simulators/AuthFlowSimulator";
+import type { SimulatorOptions } from "../types/index";
 
 /**
  * Factory function to create an AuthFlowSimulator instance

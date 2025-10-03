@@ -1,4 +1,4 @@
-import type { FlowSimulation } from "../types/index.js";
+import type { FlowSimulation } from "../types/index";
 
 /**
  * Predefined authentication flow simulations
