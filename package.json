@@ -57,7 +57,7 @@
   "license": "MIT",
   "description": "A comprehensive authentication flow simulator for local development. Simulate OAuth, 2FA, password reset, and session management flows without real auth providers.",
   "devDependencies": {
-    "@types/node": "^24.5.2",
+    "@types/node": "^25.0.3",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
     "@typescript-eslint/parser": "^8.44.1",
     "eslint": "^9.36.0",
